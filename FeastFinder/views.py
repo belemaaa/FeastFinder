@@ -20,13 +20,15 @@ def signup(request):
                 return render(request, 'main/signup.html', context)
             
             else:
-                new_customer = Customer(
+                customer = Customer(
                     name=name,
                     email=email,
-                    passowrd=password,
+                    password=password,
                     phone=phone
                 )
-                new_customer.save()
+                customer.save()
+                request.session['customer_id'] = customer.id
+
                 return render(request, 'main/login.html')
             
         return render(request, 'main/signup.html')    
@@ -34,3 +36,31 @@ def signup(request):
 
     except Exception as e:
         return render(request, 'main/404.html', {'error_message': str(e)})
+
+
+def login(request):
+        if request.method == 'POST':
+            phone = request.POST['phone']
+
+            customer = Customer.objects.get(phone=phone)
+            
+            if customer:
+                request.session['customer'] = customer.id
+                return redirect('home')
+            
+            else:
+                context = {
+                    'error': 'invalid login details'
+                }
+                return render(request, 'main/login.html', context)
+            
+        return render(request, 'main/login.html')
+
+
+def menu_page(request):
+    menu_items = Menu.objects.all()
+
+    context = {
+        'menu_items': menu_items
+    }
+    return render(request, 'main/menu.html', context)        
