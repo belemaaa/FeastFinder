@@ -63,4 +63,26 @@ def menu_page(request):
     context = {
         'menu_items': menu_items
     }
-    return render(request, 'main/menu.html', context)        
+    return render(request, 'main/menu.html', context)  
+
+
+def cart(request):
+    cart_items = request.session.get('cart_items', {})
+    menu_items = Menu.objects.filter(id__in=cart_items.keys())
+    
+    items = []
+    total_price = 0.0
+    for menu_item in menu_items:
+        qty = cart_items[str(menu_item.id)]
+        items.append({
+            'menu_item': menu_item,
+            'quantity': qty
+        })
+        total_price += menu_item.price * qty
+    
+    context = {
+        'items': items,
+        'total_price': total_price
+    }
+    
+    return render(request, 'main/cart.html', context)
