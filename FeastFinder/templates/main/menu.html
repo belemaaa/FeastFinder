@@ -3,16 +3,18 @@
 
 {% for menu_item in menu_items %}
     <div class="menu-item">
-        <p>{{ menu_items.image }}</p>
+        <p>{{ menu_item.image }}</p>
         <h3>{{ menu_item.name }} -- N{{ menu_item.price }}</h3>
         <p>{{ menu_item.description }}</p>
 
-        <form method="POST" action="{% url 'add_to_cart' %}">
+        {% comment %} <form method="POST" action="">
             {% csrf_token %}
             <input type="hidden" name="menu_item_id" value="{{ menu_item.id }}">
             <input type="hidden" name="menu_item_price" value="{{ menu_item.price }}">
             <button type="submit">Add to Order</button>
-        </form>
+        </form> {% endcomment %}
+
+        <a href="{% url 'orders' %}">View orders</a>
     </div>
 {% endfor %}
 

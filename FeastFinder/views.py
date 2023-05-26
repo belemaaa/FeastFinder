@@ -27,7 +27,6 @@ def signup(request):
                     phone=phone
                 )
                 customer.save()
-                request.session['customer_id'] = customer.id
 
                 return render(request, 'main/login.html')
             
@@ -45,7 +44,7 @@ def login(request):
             customer = Customer.objects.get(phone=phone)
             
             if customer:
-                request.session['customer'] = customer.id
+                request.session['customer'] = customer.phone
                 return redirect('home')
             
             else:
@@ -66,7 +65,20 @@ def menu_page(request):
     return render(request, 'main/menu.html', context)  
 
 
-def cart(request):
+def order_item(request):
+    
+    pass
+
+
+def order(request):
+    customer = Customer.objects.get('phone')
+
+    order_list = OrderItem.objects.all()
+
+
+
+
+
     cart_items = request.session.get('cart_items', {})
     menu_items = Menu.objects.filter(id__in=cart_items.keys())
     
