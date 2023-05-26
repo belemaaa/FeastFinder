@@ -26,7 +26,7 @@ class MenuItem(models.Model):
     menu = models.ForeignKey(Menu, on_delete=models.CASCADE)
     image = models.ImageField(max_length=200, null=True)
     name = models.CharField(max_length=100)
-    price = models.DecimalField(max_digits=6, decimal_places=2)
+    price = models.DecimalField(max_digits=100, decimal_places=2)
 
     def __str__(self):
         return f'{self.name} - {self.price}'
@@ -38,7 +38,8 @@ class Order(models.Model):
     items = models.ManyToManyField(MenuItem, through='OrderItem')
     created_at = models.DateTimeField(auto_now_add=True)
     total_price = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-
+    #price = models.DecimalField(max_digits=100, decimal_places=2)
+ 
     def __str__(self):
         return f"Order #{self.id}"
 
@@ -48,11 +49,8 @@ class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     item = models.ForeignKey(MenuItem, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1)
-    price = models.DecimalField(max_digits=10, decimal_places=2)
+    price = models.DecimalField(max_digits=100, decimal_places=2)
 
     def __str__(self):
         return f"{self.quantity} x {self.item.name}"
 
-
-class checkOut(models.Model):
-    orders = models.ForeignKey(OrderItem, )

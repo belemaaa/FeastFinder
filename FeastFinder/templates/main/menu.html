@@ -6,18 +6,17 @@
         <p>{{ menu_item.image }}</p>
         <h3>{{ menu_item.name }} -- N{{ menu_item.price }}</h3>
         <p>{{ menu_item.description }}</p>
-        <a href="">Order</a>
+        <a href="{% url 'order_details' %}">Place order</a>
 
-        {% comment %} <form method="POST" action="">
+       {% comment %} <form method="POST" action="">
             {% csrf_token %}
             <input type="hidden" name="menu_item_id" value="{{ menu_item.id }}">
             <input type="hidden" name="menu_item_price" value="{{ menu_item.price }}">
             <button type="submit">Add to Order</button>
-        </form> {% endcomment %}
+        </form>  {% endcomment %}
 
-
-
-        <a href="{% url 'orders' %}">View orders</a>
     </div>
 {% endfor %}
+
+{% comment %} <a href="{% url 'orders' %}">View orders</a> {% endcomment %}
 

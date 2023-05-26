@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Customer, Menu, MenuItem, Order, OrderItem
+from django.contrib import messages
+#from .utils import send_order_notification
 
 
 # Create your views here.
@@ -67,9 +69,8 @@ def menu_page(request):
 
 
 
-# view to order menu items 
-# behaves like an add to cart method
-def order(request, order_id):
+# view to expand the details of an order
+def order_details(request, order_id):
     order = get_object_or_404(Order, pk=order_id)
     order_items = OrderItem.objects.filter(order=order)
     customer = order.customer
@@ -77,13 +78,16 @@ def order(request, order_id):
     if request.method == 'POST':
         menu_item_id = request.POST.get('menu_item')
         menu_item = get_object_or_404(MenuItem, pk=menu_item_id)
+
         
         # Check if the menu item is already in the order items
         existing_order_item = order_items.filter(item=menu_item).first()
 
+
         if existing_order_item:
-            # Increment the quantity if the item already exists
+            # Increment the quantity and price if the item already exists
             existing_order_item.quantity += 1
+            existing_order_item.price += menu_item.price 
             existing_order_item.save()
 
         else:
@@ -91,8 +95,13 @@ def order(request, order_id):
             order_item = OrderItem.objects.create(order=order, item=menu_item)
         
 
+
+        # Update the total price of the order
+        order.total_price += menu_item.price  
+        order.save()
+
         # Redirect back to the order detail page
-        return redirect('order', order_id=order_id)
+        return redirect('order_details', order_id=order_id)
     
     menu_items = MenuItem.objects.all()
 
@@ -102,41 +111,17 @@ def order(request, order_id):
         'customer': customer, 
         'menu_items': menu_items
     }
-    return render(request, 'order.html', context)
+    return render(request, 'order_details.html', context)
+
+
+def checkOut(request):
+    items_ordered = request.session.get('order_items')
+    total_price = request.session.get('total_price')
+
+    # Save the order in the database
+    order = Order(items_ordered=items_ordered, total_price=total_price)
+    order.save()
 
 
 
 
-# def order_item(request):
-
-#     pass
-
-
-# def order(request):
-#     customer = Customer.objects.get('phone')
-
-#     order_list = OrderItem.objects.all()
-
-
-
-
-
-#     cart_items = request.session.get('cart_items', {})
-#     menu_items = Menu.objects.filter(id__in=cart_items.keys())
-    
-#     items = []
-#     total_price = 0.0
-#     for menu_item in menu_items:
-#         qty = cart_items[str(menu_item.id)]
-#         items.append({
-#             'menu_item': menu_item,
-#             'quantity': qty
-#         })
-#         total_price += menu_item.price * qty
-    
-#     context = {
-#         'items': items,
-#         'total_price': total_price
-#     }
-    
-#     return render(request, 'main/cart.html', context)

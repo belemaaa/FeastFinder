@@ -1,0 +1,28 @@
+<h1>Order Details</h1>
+<p>Order ID: {{ order.id }}</p>
+<p>Customer: {{ customer.name }}</p>
+
+<h2>Order Items</h2>
+<ul>
+  {% for order_item in order_items %}
+    <li>{{ order_item.quantity }} x {{ order_item.item.name }} - N{{ order_item.price }}</li>
+  {% endfor %}
+</ul>
+
+<h2>Menu Items</h2>
+<ul>
+  {% for menu_item in menu_items %}
+    <li>
+      <form method="POST" action="{% url 'order_detail' order_id=order.id %}">
+        {% csrf_token %}
+        <input type="hidden" name="menu_item" value="{{ menu_item.id }}">
+        <button type="submit">{{ menu_item.name }}</button>
+      </form>
+    </li>
+  {% endfor %}
+</ul>
+
+<form for="checkout" action="{% url 'checkout' %}">
+  {% csrf_token %}
+  <input type="submit" value="CheckOut">
+</form>
