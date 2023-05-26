@@ -1,0 +1,19 @@
+<h1>Order Summary for {{customer.name}}</h1>
+
+{% for item in order_details %}
+<ol>
+    <li>
+        <dl>{{item.name}}</dl>
+        <dl>{{item.price}}</dl>
+        <dl>{{item.quantity}}</dl>
+    </li>
+</ol>
+
+<p>{{order.total_price}}
+
+
+<form method="POST" action="{% url 'confirm_checkout' order_id=order.id %}">
+        {% csrf_token %}
+        <input type="submit" value="Confirm checkout">
+</form>
+    

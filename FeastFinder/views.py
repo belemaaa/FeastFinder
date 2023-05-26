@@ -6,6 +6,8 @@ from django.contrib import messages
 
 # Create your views here.
 
+#learn how to code well guy, your mates are making millions
+
 def signup(request):
     try:
         if request.method == 'POST':
@@ -74,7 +76,7 @@ def order_details(request, order_id):
     order = get_object_or_404(Order, pk=order_id)
     order_items = OrderItem.objects.filter(order=order)
     customer = order.customer
-    
+
     if request.method == 'POST':
         menu_item_id = request.POST.get('menu_item')
         menu_item = get_object_or_404(MenuItem, pk=menu_item_id)
@@ -114,13 +116,26 @@ def order_details(request, order_id):
     return render(request, 'order_details.html', context)
 
 
+# view to display order summary and checout the orders
 def checkOut(request):
-    items_ordered = request.session.get('order_items')
-    total_price = request.session.get('total_price')
+    context = {
 
-    # Save the order in the database
-    order = Order(items_ordered=items_ordered, total_price=total_price)
-    order.save()
+    }
+    return render(request, "checkout.html")
+
+
+
+    # items_ordered = request.session.get('items_ordered') or request.session.get('order_item')
+    # total_price = request.session.get('total_price')
+
+    # # Save the order in the database
+    # order = Order(items_ordered=order, total_price=total_price)
+    # order.save()
+
+    #  # Notify admin about order
+    # for item in order_details:
+    #     print(f"New order received: {order.order_item}, Total price: {order.total_price}")
+
 
 
 
