@@ -136,7 +136,7 @@ def checkOut(request):
     # for item in order_details:
     #     print(f"New order received: {order.order_item}, Total price: {order.total_price}")
 
-
+#hi
 
 
 
