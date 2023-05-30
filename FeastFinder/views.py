@@ -51,7 +51,7 @@ def login(request):
             customer = Customer.objects.get(phone=phone)
             
             if customer:
-                request.session['customer'] = customer.phone
+                request.session['customer'] = customer.name
                 return redirect('home')
             
             else:
@@ -97,6 +97,7 @@ def order_details(request, order_id):
         else:
             # Create a new OrderItem and associate it with the Order
             order_item = OrderItem.objects.create(order=order, item=menu_item)
+            order_items += order_item
         
 
 
@@ -105,9 +106,11 @@ def order_details(request, order_id):
         order.save()
 
         # Redirect back to the order detail page
-        return redirect('order_details', order_id=order_id)
-    
+        return redirect('order_details', order_id=order_id)   
     menu_items = MenuItem.objects.all()
+
+    request.session['order_items'] = order_items
+    request.session['order'] = order
 
     context = {
         'order': order,
@@ -120,10 +123,17 @@ def order_details(request, order_id):
 
 # view to display order summary and checout the orders
 def checkOut(request):
+    order_items = request.session.get('order_items')
+    order = request.session.get('order')
+    customer = request.session.get('customer')
+
     context = {
+        'order': 'order',
+        'order_items': 'order_items',
+        'customer': 'customer'
 
     }
-    return render(request, "checkout.html")
+    return render(request, "checkout.html", context)
 
 
 

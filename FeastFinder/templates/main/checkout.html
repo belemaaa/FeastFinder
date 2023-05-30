@@ -1,11 +1,10 @@
-<h1>Order Summary for {{customer.name}}</h1>
+<h1>Order Summary for {{customer}}</h1>
 
-{% for item in order_details %}
+{% for item in order %}
 <ol>
     <li>
-        <dl>{{item.name}}</dl>
-        <dl>{{item.price}}</dl>
-        <dl>{{item.quantity}}</dl>
+        <dl>{{order}}</dl>
+        <dl>{{order_item.quantity}}</dl>
     </li>
 </ol>
 
