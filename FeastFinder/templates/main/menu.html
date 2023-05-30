@@ -6,7 +6,7 @@
         <p>{{ menu_item.image }}</p>
         <h3>{{ menu_item.name }} -- N{{ menu_item.price }}</h3>
         <p>{{ menu_item.description }}</p>
-        <a href="{% url 'order_details' %}">Place order</a>
+        <a href="{% url 'orderdetails' %}">Place order</a>
 
        {% comment %} <form method="POST" action="">
             {% csrf_token %}

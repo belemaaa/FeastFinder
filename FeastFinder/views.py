@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Customer, Menu, MenuItem, Order, OrderItem
+from .models import Customer, MenuItem, Order, OrderItem
 from django.contrib import messages
 import bcrypt
 #from .utils import send_order_notification
@@ -44,6 +44,7 @@ def signup(request):
         return render(request, 'main/404.html', {'error_message': str(e)})
 
 
+
 def login(request):
         if request.method == 'POST':
             phone = request.POST['phone']
@@ -63,6 +64,7 @@ def login(request):
         return render(request, 'main/login.html')
 
 
+
 def menu_page(request):
     menu_items = MenuItem.objects.all()
 
@@ -73,9 +75,10 @@ def menu_page(request):
 
 
 
+
 # view to expand the details of an order
-def order_details(request, order_id):
-    order = get_object_or_404(Order, pk=order_id)
+def order_details(request):
+    order = get_object_or_404(Order)
     order_items = OrderItem.objects.filter(order=order)
     customer = order.customer
 
@@ -119,6 +122,8 @@ def order_details(request, order_id):
         'menu_items': menu_items
     }
     return render(request, 'order_details.html', context)
+
+
 
 
 # view to display order summary and checout the orders

@@ -6,16 +6,7 @@ class Customer(models.Model):
     name = models.CharField(max_length=100)
     email = models.CharField(max_length=60, null=True)
     password = models.CharField(max_length=20)
-    phone = models.CharField(max_digits=15)
-
-    def __str__(self):
-        return self.name
-    
-
-
-class Menu(models.Model):
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
-    name = models.CharField(max_length=100)
+    phone = models.CharField(max_length=15)
 
     def __str__(self):
         return self.name
@@ -23,7 +14,6 @@ class Menu(models.Model):
 
 
 class MenuItem(models.Model):
-    menu = models.ForeignKey(Menu, on_delete=models.CASCADE)
     image = models.ImageField(max_length=200, null=True)
     name = models.CharField(max_length=100)
     price = models.DecimalField(max_digits=100, decimal_places=2)
