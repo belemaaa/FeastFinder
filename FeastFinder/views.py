@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Customer, Menu, MenuItem, Order, OrderItem
 from django.contrib import messages
+import bcrypt
 #from .utils import send_order_notification
 
 
@@ -16,6 +17,7 @@ def signup(request):
             password = request.POST['password']
             phone = request.POST['phone']
 
+            hashed_password = bcrypt.hashpw(password, bcrypt.gensalt())
             existing_customer = Customer.objects.filter(phone=phone)
 
             if existing_customer:
@@ -28,7 +30,7 @@ def signup(request):
                 customer = Customer(
                     name=name,
                     email=email,
-                    password=password,
+                    password=hashed_password,
                     phone=phone
                 )
                 customer.save()
